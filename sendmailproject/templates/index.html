@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Mail App{% endblock %}
+
+{% block content %}
+<h2>Welcome to Mail App</h2>
+<p>Your all-in-one email marketing platform to manage audiences, subscribers, templates, and campaigns effortlessly.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 2rem;">
+  <a href="{% url 'audiences' %}" style="flex: 1 1 200px; background: #2563eb; color: white; padding: 1.5rem; border-radius: 10px; text-align: center; text-decoration: none; font-weight: 600; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4); transition: background-color 0.3s ease;">
+    Manage Audiences
+  </a>
+  <a href="{% url 'subscribers' %}" style="flex: 1 1 200px; background: #10b981; color: white; padding: 1.5rem; border-radius: 10px; text-align: center; text-decoration: none; font-weight: 600; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4); transition: background-color 0.3s ease;">
+    Manage Subscribers
+  </a>
+  <a href="{% url 'email_templates' %}" style="flex: 1 1 200px; background: #f59e0b; color: white; padding: 1.5rem; border-radius: 10px; text-align: center; text-decoration: none; font-weight: 600; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); transition: background-color 0.3s ease;">
+    Email Templates
+  </a>
+  <a href="{% url 'campaigns' %}" style="flex: 1 1 200px; background: #ef4444; color: white; padding: 1.5rem; border-radius: 10px; text-align: center; text-decoration: none; font-weight: 600; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4); transition: background-color 0.3s ease;">
+    Campaigns
+  </a>
+  <a href="{% url 'email_logs' %}" style="flex: 1 1 200px; background: #6b7280; color: white; padding: 1.5rem; border-radius: 10px; text-align: center; text-decoration: none; font-weight: 600; box-shadow: 0 4px 10px rgba(107, 114, 128, 0.4); transition: background-color 0.3s ease;">
+    Email Logs
+  </a>
+</div>
+{% endblock %}

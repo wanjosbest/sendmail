@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block title %}Campaigns{% endblock %}
+
+{% block content %}
+<style>
+  .campaigns-container {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .top-bar h1 {
+    margin: 0;
+    color: #1e40af;
+  }
+
+  .btn-primary {
+    background-color: #2563eb;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #1e40af;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  th, td {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+
+  th {
+    background-color: #f3f4f6;
+    color: #333;
+  }
+
+  tr:hover {
+    background-color: #f9fafb;
+  }
+
+  .status {
+    padding: 0.35rem 0.8rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: inline-block;
+  }
+
+  .status-pending {
+    background-color: #f59e0b;
+    color: white;
+  }
+
+  .status-sent {
+    background-color: #10b981;
+    color: white;
+  }
+
+  .send-button {
+    background-color: brown;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .send-button:hover {
+    background-color: #8b0000;
+  }
+
+  @media (max-width: 768px) {
+    .top-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+
+    thead {
+      display: none;
+    }
+
+    tr {
+      border: 1px solid #e5e7eb;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    td {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+    }
+
+    td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: #333;
+    }
+  }
+</style>
+
+<div class="campaigns-container">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-info">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="top-bar">
+    <h1>Email Campaigns</h1>
+    <a href="{% url 'campaign_create' %}" class="btn-primary">+ Create Campaign</a>
+  </div>
+
+  {% if campaigns %}
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Audience</th>
+        <th>Template</th>
+        <th>Status</th>
+        <th>Created At</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for campaign in campaigns %}
+      <tr>
+        <td data-label="Name">{{ campaign.name }}</td>
+        <td data-label="Audience">{{ campaign.audience.name }}</td>
+        <td data-label="Template">{{ campaign.template.subject }}</td>
+        <td data-label="Status">
+          {% if campaign.status == 'pending' %}
+            <span class="status status-pending">Pending</span>
+          {% elif campaign.status == 'sent' %}
+            <span class="status status-sent">Sent</span>
+          {% else %}
+            {{ campaign.status|capfirst }}
+          {% endif %}
+        </td>
+        <td data-label="Created">{{ campaign.created_at|date:"M d, Y H:i" }}</td>
+        <td data-label="Send">
+          {% if not campaign.checks %}
+            <form action="{% url 'senddraft' campaign.pk %}" method="POST" style="margin:0;">
+              {% csrf_token %}
+              <button type="submit" class="send-button">Send</button>
+            </form>
+          {% else %}
+            <span style="color: green; font-weight: 600;">Sent</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>No campaigns created yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}Subscribers{% endblock %}
+
+{% block content %}
+<style>
+  .subscriber-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .top-bar h2 {
+    margin: 0;
+    color: #333;
+  }
+
+  .btn-success {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    font-weight: bold;
+    border-radius: 6px;
+    text-decoration: none;
+  }
+
+  .btn-success:hover {
+    background-color: #218838;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 3rem;
+  }
+
+  th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #555;
+  }
+
+  td {
+    color: #444;
+  }
+
+  .no-data {
+    font-style: italic;
+    color: #6b7280;
+  }
+
+  @media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+
+    thead {
+      display: none;
+    }
+
+    tr {
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 1rem;
+      background-color: #fff;
+    }
+
+    td {
+      padding: 0.5rem 0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    td::before {
+      content: attr(data-label);
+      font-weight: bold;
+      color: #333;
+    }
+  }
+</style>
+
+<div class="subscriber-container">
+
+  <!-- Manual Subscribers -->
+  <div class="top-bar">
+    <h2>Manual Subscribers</h2>
+    <a href="{% url 'subscriber_create' %}" class="btn-success">+ Add Subscriber</a>
+  </div>
+
+  {% if subscribers %}
+  <table>
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Audience</th>
+        <th>Subscribed</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for subscriber in subscribers %}
+      <tr>
+        <td data-label="Email">{{ subscriber.email }}</td>
+        <td data-label="Name">{{ subscriber.name }}</td>
+        <td data-label="Audience">{{ subscriber.audience.name }}</td>
+        <td data-label="Subscribed">{% if subscriber.subscribed %}Yes{% else %}No{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="no-data">No manual subscribers found.</p>
+  {% endif %}
+
+  <!-- Newsletter Subscribers -->
+  <div class="top-bar">
+    <h2>Newsletter Subscribers</h2>
+  </div>
+
+  {% if newssubs %}
+  <table>
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Subscribed</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for subscriber in newssubs %}
+      <tr>
+        <td data-label="Email">{{ subscriber.email }}</td>
+        <td data-label="Name">{{ subscriber.name }}</td>
+        <td data-label="Subscribed">{% if subscriber.subscribed %}Yes{% else %}No{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="no-data">No newsletter subscribers found.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block title %}Email Templates{% endblock %}
+
+{% block content %}
+<style>
+  .template-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .template-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .template-header h2 {
+    margin: 0;
+    font-size: 1.6rem;
+    color: #1e3a8a;
+  }
+
+  .btn-create {
+    background-color: #2563eb;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+  }
+
+  .btn-create:hover {
+    background-color: #1e40af;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 0.95rem;
+  }
+
+  th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  th {
+    background-color: #f3f4f6;
+    color: #444;
+    font-weight: 600;
+  }
+
+  tr:hover {
+    background-color: #f9fafb;
+  }
+
+  .action-links a {
+    margin-right: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .action-edit {
+    color: #2563eb;
+  }
+
+  .action-edit:hover {
+    text-decoration: underline;
+  }
+
+  .action-delete {
+    color: #dc2626;
+  }
+
+  .action-delete:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+
+    thead {
+      display: none;
+    }
+
+    tr {
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    td {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+    }
+
+    td::before {
+      content: attr(data-label);
+      font-weight: bold;
+      color: #333;
+    }
+  }
+</style>
+
+<div class="template-container">
+  <div class="template-header">
+    <h2>Email Templates</h2>
+    <a href="{% url 'email_template_create' %}" class="btn-create">+ New Template</a>
+  </div>
+
+  {% if templates %}
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Subject</th>
+        <th>Created By</th>
+        <th>Created At</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for template in templates %}
+      <tr>
+        <td data-label="Name">{{ template.name }}</td>
+        <td data-label="Subject">{{ template.subject }}</td>
+        <td data-label="Created By">{{ template.user.username }}</td>
+        <td data-label="Created At">{{ template.created_at|date:"M d, Y" }}</td>
+        <td data-label="Actions" class="action-links">
+          <a href="{% url 'email_template_edit' template.pk %}" class="action-edit">Edit</a>
+          <a href="{% url 'email_template_delete' template.pk %}" class="action-delete">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>No email templates found. <a href="{% url 'email_template_create' %}" style="color: #2563eb;">Create one now</a>.</p>
+  {% endif %}
+</div>
+{% endblock %}

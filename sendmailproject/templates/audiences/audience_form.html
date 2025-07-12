@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}{% if audience %}Edit Audience{% else %}Create Audience{% endif %}{% endblock %}
+
+{% block content %}
+<style>
+  .form-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .form-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+
+  .form-container label {
+    font-weight: 600;
+    display: block;
+    margin: 1rem 0 0.3rem;
+    color: #444;
+  }
+
+  .form-container input[type="text"],
+  .form-container input[type="email"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 1rem;
+  }
+
+  .form-container .alert {
+    background-color: #ffe0e0;
+    padding: 1rem;
+    border-radius: 6px;
+    color: #b30000;
+    margin-bottom: 1rem;
+  }
+
+  .form-container .import-link {
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+
+  .form-container .btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+
+  .btn-primary {
+    background-color: #007BFF;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+  .btn-secondary {
+    background-color: #ccc;
+    color: #333;
+    margin-left: 1rem;
+    text-decoration: none;
+  }
+
+  .btn-secondary:hover {
+    background-color: #aaa;
+  }
+</style>
+
+<div class="form-container">
+  <h2>{% if audience %}Edit Audience{% else %}Create New Audience{% endif %}</h2>
+
+  {% if error %}
+    <div class="alert">{{ error }}</div>
+  {% endif %}
+
+  <form method="POST">
+    {% csrf_token %}
+
+    <p class="import-link">
+      <a href="{% url 'import_contact' %}">📄 Import Contacts via CSV</a>
+    </p>
+
+    <label for="name">Audience Name</label>
+    <input type="text" id="name" name="name" required
+           value="{% if audience %}{{ audience.name }}{% endif %}" />
+
+    <label for="email">Audience Email</label>
+    <input type="email" id="email" name="email" required
+           value="{% if audience %}{{ audience.email }}{% endif %}" />
+
+    <button type="submit" class="btn btn-primary">
+      {% if audience %}Update{% else %}Create{% endif %}
+    </button>
+    <a href="{% url 'audiences' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}
