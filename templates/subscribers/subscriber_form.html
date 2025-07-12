@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Subscribers - Mail App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #1e40af;
+      padding: 1rem 2rem;
+      color: white;
+      text-align: center;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      color: #1e40af;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      align-items: center;
+    }
+
+    form input[type="text"],
+    form input[type="email"],
+    form select {
+      padding: 0.65rem 1rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 1rem;
+      flex: 1 1 250px;
+      background-color: #f9fafb;
+    }
+
+    form button {
+      padding: 0.65rem 1.5rem;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    form button:hover {
+      background-color: #1e40af;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    th {
+      background-color: #f3f4f6;
+      font-weight: 600;
+      color: #333;
+    }
+
+    td {
+      color: #444;
+    }
+
+    tr:hover {
+      background-color: #f9fafb;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #6b7280;
+      margin-top: 1.5rem;
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      form {
+        flex-direction: column;
+      }
+
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      thead {
+        display: none;
+      }
+
+      tr {
+        margin-bottom: 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 1rem;
+      }
+
+      td {
+        padding: 0.5rem 0;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #333;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Subscribers</h1>
+  </header>
+
+  <main>
+    <form method="post" action="{% url 'subscriber_create' %}">
+      {% csrf_token %}
+      <!-- Uncomment if you want to collect name/email from this form -->
+      <!--
+      <input type="text" name="name" placeholder="Subscriber Name" required />
+      <input type="email" name="email" placeholder="Subscriber Email" required />
+      -->
+      <select name="audience" required>
+        <option value="" disabled selected>Select Audience</option>
+        {% for audience in audiences %}
+          <option value="{{ audience.id }}">{{ audience.name }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Add Subscriber</button>
+    </form>
+
+    {% if subscribers %}
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Name</th>
+          <th>Audience</th>
+          <th>Subscribed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for subscriber in subscribers %}
+        <tr>
+          <td data-label="Email">{{ subscriber.email }}</td>
+          <td data-label="Name">{{ subscriber.name }}</td>
+          <td data-label="Audience">{{ subscriber.audience.name }}</td>
+          <td data-label="Subscribed">{% if subscriber.subscribed %}Yes{% else %}No{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="no-data">No subscribers yet. Add some above.</p>
+    {% endif %}
+  </main>
+</body>
+</html>

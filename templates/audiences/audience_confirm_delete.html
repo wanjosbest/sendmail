@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Delete Audience{% endblock %}
+
+{% block content %}
+<style>
+    .delete-container {
+        max-width: 500px;
+        margin: 2rem auto;
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .delete-container h2 {
+        color: #c0392b;
+    }
+
+    .delete-container p {
+        margin: 1rem 0 2rem;
+        color: #555;
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .btn-delete,
+    .btn-cancel {
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-delete {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background-color: #c0392b;
+    }
+
+    .btn-cancel {
+        background-color: #bdc3c7;
+        color: #333;
+    }
+
+    .btn-cancel:hover {
+        background-color: #95a5a6;
+    }
+</style>
+
+<div class="delete-container">
+    <h2>Delete Audience</h2>
+    <p>Are you sure you want to delete audience "<strong>{{ audience.name }}</strong>"?</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="btn-group">
+            <button type="submit" class="btn-delete">Yes, Delete</button>
+            <a href="{% url 'audiences' %}" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

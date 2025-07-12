@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Mail App{% endblock %}</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fafb;
+      color: #1f2937;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    a {
+      color: #ffffff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #cbd5e1;
+    }
+
+    /* Header */
+    header {
+      background-color: #1e40af;
+      color: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+
+    .menu-toggle span {
+      width: 25px;
+      height: 3px;
+      background-color: white;
+      border-radius: 3px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav li a {
+      font-weight: 600;
+      padding: 0.4rem 0.6rem;
+      border-radius: 5px;
+    }
+
+    nav li a:hover,
+    nav li a.active {
+      background-color: #3b82f6;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: flex;
+      }
+
+      nav {
+        width: 100%;
+      }
+
+      nav ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 1rem;
+        background-color: #1e40af;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 1rem 0;
+      }
+
+      nav ul.show {
+        display: flex;
+      }
+
+      nav li {
+        width: 100%;
+      }
+
+      nav li a {
+        display: block;
+        width: 100%;
+        padding: 0.75rem 1.5rem;
+      }
+    }
+
+    main {
+      flex: 1;
+      max-width: 960px;
+      margin: 2rem auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #e5e7eb;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-wrapper">
+      <!-- LOGO -->
+      <div class="logo">
+        <a href="{% url 'home' %}">MAIL APP</a>
+      </div>
+
+      <!-- MENU TOGGLE (MOBILE) -->
+      <div class="menu-toggle" id="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <!-- NAVIGATION -->
+      <nav>
+        <ul id="nav-menu">
+          <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
+          <li><a href="{% url 'audiences' %}" class="{% if request.resolver_match.url_name == 'audiences' %}active{% endif %}">Audiences</a></li>
+          <li><a href="{% url 'subscribers' %}" class="{% if request.resolver_match.url_name == 'subscribers' %}active{% endif %}">Subscribers</a></li>
+          <li><a href="{% url 'email_templates' %}" class="{% if request.resolver_match.url_name == 'email_templates' %}active{% endif %}">Templates</a></li>
+          <li><a href="{% url 'campaigns' %}" class="{% if request.resolver_match.url_name == 'campaigns' %}active{% endif %}">Campaigns</a></li>
+          <li><a href="{% url 'email_logs' %}" class="{% if request.resolver_match.url_name == 'email_logs' %}active{% endif %}">Logs</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+          {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'register' %}">Register</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- PAGE CONTENT -->
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    &copy; {{ current_year }} Wanjos Mail App. All rights reserved.
+  </footer>
+
+  <!-- JS: MENU TOGGLE -->
+  <script>
+    const toggleBtn = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    toggleBtn.addEventListener('click', () => {
+      navMenu.classList.toggle('show');
+    });
+  </script>
+</body>
+</html>

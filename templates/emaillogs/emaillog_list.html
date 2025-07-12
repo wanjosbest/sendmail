@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Email Logs - Mail App</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9fafb;
+    margin: 0; padding: 0 1rem;
+  }
+  header {
+    background: #1e40af;
+    padding: 1rem 2rem;
+    color: white;
+    text-align: center;
+  }
+  main {
+    max-width: 900px;
+    margin: 2rem auto;
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    overflow-x: auto;
+  }
+  h1 {
+    color: #1e40af;
+    margin-bottom: 1rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.8rem 1rem;
+    text-align: left;
+  }
+  th {
+    background-color: #f3f4f6;
+  }
+  tr:hover {
+    background-color: #f9fafb;
+  }
+  .status-success {
+    color: #10b981;
+    font-weight: 600;
+  }
+  .status-failed {
+    color: #ef4444;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Email Logs</h1>
+  </header>
+  <main>
+    {% if logs %}
+    <table>
+      <thead>
+        <tr>
+          <th>Recipient</th>
+          <th>Campaign</th>
+          <th>Subject</th>
+          <th>Status</th>
+          <th>Sent At</th>
+          <th>Error</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+        <tr>
+          <td>{{ log.recipient.email }}</td>
+          <td>{{ log.campaign.name }}</td>
+          <td>{{ log.subject }}</td>
+          <td class="status-{{ log.status }}">{{ log.status|capfirst }}</td>
+          <td>{{ log.sent_at|date:"M d, Y H:i" }}</td>
+          <td>{% if log.error %}{{ log.error }}{% else %}-{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p>No email logs found.</p>
+    {% endif %}
+  </main>
+</body>
+</html>
