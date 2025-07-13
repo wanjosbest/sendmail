@@ -3,12 +3,15 @@
 
 {% block content %}
 <div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
-  <div class="card shadow-sm p-4 w-100" style="max-width: 500px;">
-    <h3 class="text-center mb-3 fw-bold">Create an Account</h3>
-    <p class="text-center text-muted mb-4 small">Join our email marketing platform and grow your business</p>
-    
+  <div class="card shadow border-0 p-4 w-100" style="max-width: 480px;">
+    <div class="text-center mb-4">
+      <h3 class="fw-bold">Create an Account</h3>
+      <p class="text-muted small">Join us and start sending campaigns in seconds</p>
+    </div>
+
     <form method="POST" novalidate>
       {% csrf_token %}
+      
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
         <input
@@ -16,11 +19,11 @@
           class="form-control"
           id="username"
           name="username"
-          placeholder="Choose a username"
+          placeholder="e.g. johndoe"
           required
         />
       </div>
-      
+
       <div class="mb-3">
         <label for="email" class="form-label">Email address</label>
         <input
@@ -40,7 +43,7 @@
           class="form-control"
           id="password"
           name="password"
-          placeholder="Create a password"
+          placeholder="Create a secure password"
           required
         />
       </div>
@@ -52,9 +55,16 @@
           class="form-control"
           id="password2"
           name="password2"
-          placeholder="Confirm your password"
+          placeholder="Repeat your password"
           required
         />
+      </div>
+
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="terms" required />
+        <label class="form-check-label small" for="terms">
+          I agree to the <a href="#">Terms & Conditions</a>
+        </label>
       </div>
 
       <div class="d-grid">
@@ -62,7 +72,8 @@
       </div>
 
       <p class="text-center mt-3 small">
-        Already have an account? <a href="{% url 'login' %}" class="text-decoration-none">Login here</a>.
+        Already have an account?
+        <a href="{% url 'login' %}" class="text-decoration-none">Login here</a>.
       </p>
     </form>
   </div>
