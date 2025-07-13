@@ -34,7 +34,7 @@ class NewsletterSubscriberAdmin(admin.ModelAdmin):
 
 @admin.register(EmailTemplate)
 class EmailTemplateAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user', 'subject', 'created_at')
+    list_display = ('name', 'subject', 'created_at')
     search_fields = ('name', 'subject', 'user__username')
     list_filter = ('created_at',)
 

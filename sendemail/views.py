@@ -143,7 +143,7 @@ def audience_delete(request, audience_id):
 
 @login_required(login_url='login')
 def subscriber_list(request):
-    subscribers = Subscriber.objects.all()
+    subscribers = Subscriber.objects.filter(user = request.user)
     NewsletterSubs = NewsletterSubscriber.objects.all()
     return render(request, "subscribers/subscriber_list.html", {"subscribers": subscribers, "newssubs": NewsletterSubs})
 
@@ -157,7 +157,7 @@ def subscriber_create(request):
         name = getaud.name
         if email and audience_id:
             audience = get_object_or_404(Audience, pk=audience_id, user=request.user)
-            Subscriber.objects.create(email=email, name=name, audience=audience, subscribed=True)
+            Subscriber.objects.create(user = request.user, email=email, name=name, audience=audience, subscribed=True)
             return redirect("subscribers")
         else:
             return render(request, "subscribers/subscriber_form.html", {"audiences": audiences, "error": "Email and audience are required."})
@@ -227,17 +227,17 @@ def emailtemplate_update(request, template_id):
     if request.method == "POST":
         name = request.POST.get("name")
         subject = request.POST.get("subject")
-        body = request.POST.get("body")
+        body = request.POST.get("html_content")
         if name and subject and body:
             template.name = name
             template.subject = subject
-            template.body_text = body
+            template.html_content = body
             template.save()
             messages.success(request, "Good Job! Template edited")
             return redirect("email_templates")
         else:
-            return render(request, "emailtemplates/emailtemplate_form.html", {"template": template, "error": "All fields are required."})
-    return render(request, "emailtemplates/emailtemplate_form.html", {"template": template})
+            return render(request, "emailtemplates/edittemplates.html", {"template": template, "error": "All fields are required."})
+    return render(request, "emailtemplates/edittemplates.html", {"template": template})
 
 @login_required(login_url='login')
 def emailtemplate_delete(request, template_id):
@@ -247,6 +247,39 @@ def emailtemplate_delete(request, template_id):
         return redirect("email_templates")
     return render(request, "emailtemplates/emailtemplate_confirm_delete.html", {"template": template})
 
+
+def template_upload(request):
+    default_html = """
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>{{ subject }}</title>
+  <style>
+    body { font-family: Arial; background: #f4f4f4; padding: 20px; }
+    .container { background: white; padding: 20px; max-width: 600px; margin: auto; border-radius: 8px; }
+    h1 { color: #333; }
+    .footer { font-size: 12px; color: #888; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hello {{ name }}</h1>
+    <p>This is a sample email template you can edit.</p>
+    <div class="footer">© 2025 Your Company</div>
+  </div>
+</body>
+</html>
+""".strip()
+
+    if request.method == 'POST':
+        name = request.POST['name']
+        subject = request.POST['subject']
+        html_content = request.POST['html_content']
+        EmailTemplate.objects.create(user = request.user, name=name, subject=subject, html_content=html_content)
+        return redirect('email_templates')
+
+    return render(request, 'emailtemplates/upload.html', {'default_html': default_html})
 
 # ---------- CAMPAIGN VIEWS ----------
 

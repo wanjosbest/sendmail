@@ -25,7 +25,7 @@ class Audience(models.Model):
 
 
 class Subscriber(models.Model):
-  
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="usersubs", null=True)
     audience = models.ForeignKey(Audience, on_delete=models.CASCADE, related_name="subscribers", default=85)
     email = models.EmailField(null=True)
     name = models.CharField(max_length=255, blank=True)
@@ -48,17 +48,20 @@ class NewsletterSubscriber(models.Model):
         return f"{self.email} ({'Subscribed' if self.subscribed else 'Unsubscribed'})"
 
 
+
+
+
+
 class EmailTemplate(models.Model):
- 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="email_templates")
+    user = models.ForeignKey(User, related_name= "emailuser",on_delete = models.CASCADE, null=True)
     name = models.CharField(max_length=255)
     subject = models.CharField(max_length=255)
-    body_html = models.TextField()
-    body_text = models.TextField(blank=True)
+    html_content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
+
 
 
 class Campaign(models.Model):

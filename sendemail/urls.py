@@ -27,9 +27,10 @@ urlpatterns = [
 
     # Email Templates
     path('templates/', views.emailtemplate_list, name='email_templates'),
-    path('templates/create/', views.emailtemplate_create, name='email_template_create'),
+    path('templates/create/', views.template_upload, name='email_template_create'),
     path('templates/<int:template_id>/edit/', views.emailtemplate_update, name='email_template_edit'),
     path('templates/<int:template_id>/delete/', views.emailtemplate_delete, name='email_template_delete'),
+    path('upload/', views.template_upload, name='template_upload'),
 
     # Campaigns
     path('campaigns/', views.campaign_list, name='campaigns'),

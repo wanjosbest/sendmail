@@ -159,7 +159,7 @@
     <tbody>
       {% for campaign in campaigns %}
       <tr>
-        <td data-label="Name">{{ campaign.name }}</td>
+        <td data-label="Name"><b>{{ campaign.subject }}</b></td>
         <td data-label="Audience">{{ campaign.audience.name }}</td>
         <td data-label="Template">{{ campaign.template.subject }}</td>
         <td data-label="Status">

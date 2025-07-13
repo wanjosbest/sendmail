@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Email Template</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        textarea { width: 100%; height: 400px; font-family: monospace; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
+        h2 { color: #333; }
+        pre { background: #eee; padding: 15px; overflow: auto; max-height: 400px; }
+        .btn { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <h2>Upload Your Email Template</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label>Template Name:</label><br>
+            <input type="text" name="name" required style="width:100%; padding:10px; margin-bottom:10px;"><br>
+            <label>Subject:</label><br>
+            <input type="text" name="subject" required style="width:100%; padding:10px; margin-bottom:10px;"><br>
+            <label>Paste your HTML code below:</label><br>
+            <textarea name="html_content" required>{{ default_html }}</textarea><br>
+            <button class="btn" type="submit">Upload Template</button>
+        </form>
+
+        <hr>
+        <h3>📄 Default HTML Design (You Can Copy & Edit)</h3>
+        <pre>{{ default_html|escape }}</pre>
+    </div>
+</body>
+</html>
